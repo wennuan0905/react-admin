@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Button, Card, Icon, Table } from "antd";
+import { Button, Card, Icon, Table, Modal } from "antd";
 import { reqCategorys } from "../../api";
+import AddForm from "./add-form";
+
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -9,9 +11,11 @@ class Category extends Component {
       subCategorys: [], // 二级分类数组
       parentId: "0", //分类id   0表示一级分类
       parentName: "", // 分类名称
+      showStatus: 0, //对话框是否显示  0不显示，1显示添加框 2显示更新框
     };
     // this.getCategorys = this.getCategorys.bind(this)
   }
+
   componentWillMount() {
     this.initColumn();
   }
@@ -68,6 +72,29 @@ class Category extends Component {
       }
     );
   };
+
+  showModal = () => {
+    this.setState({
+      showStatus: 0,
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      showStatus: 0,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      showStatus: 0,
+    });
+  };
+  showAdd = () => {
+    this.setState({
+      showStatus: 1,
+    });
+  };
   // 点击一级分类修改状态
   showCategorys = () => {
     this.setState({
@@ -81,7 +108,13 @@ class Category extends Component {
     this.getCategorys();
   }
   render() {
-    const { categorys, parentId, subCategorys, parentName } = this.state;
+    const {
+      categorys,
+      parentId,
+      subCategorys,
+      parentName,
+      showStatus,
+    } = this.state;
     const title =
       parentId === "0" ? (
         "一级分类"
@@ -93,7 +126,7 @@ class Category extends Component {
       );
     const extra = (
       <span>
-        <Button type="primary">
+        <Button type="primary" onClick={this.showAdd}>
           <Icon type="plus" />
           添加
         </Button>
@@ -105,6 +138,18 @@ class Category extends Component {
           dataSource={parentId === "0" ? categorys : subCategorys}
           columns={this.columns}
         />
+        <Modal
+          title="添加分类"
+          visible={showStatus === 1}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <AddForm
+            categorys={categorys}
+            parentId={parentId}
+            setForm={(form)=>{this.form=form}}
+          />
+        </Modal>
       </Card>
     );
   }
