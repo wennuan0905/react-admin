@@ -1,21 +1,23 @@
-import React, { Component } from "react";
-import { Route } from "react-router-dom";
-import "antd/dist/antd.css";
-import Admin from "./pages/admin/admin";
-import Login from "./pages/login/login";
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
+import React, {Component} from 'react'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
+
+import Login from './pages/login/login'
+import Admin from './pages/admin/admin'
+
+/*
+应用的根组件
+ */
+export default class App extends Component {
+
+
+  render () {
     return (
-      <>
-        <Route path="/login" component={Login} />
-        <Route path="/" component={Admin} />
-      </>
-    );
+      <BrowserRouter>
+        <Switch> {/*只匹配其中一个*/}
+          <Route path='/login' component={Login}></Route>
+          <Route path='/' component={Admin}></Route>
+        </Switch>
+      </BrowserRouter>
+    )
   }
 }
-
-export default App;
